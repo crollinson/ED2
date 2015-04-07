@@ -299,6 +299,12 @@ subroutine canopy_photosynthesis(csite,cmet,mzg,ipa,lsl,ntext_soil              
             can_ssh = csite%can_shv(ipa)
             !------------------------------------------------------------------------------!
 
+            !------------------------------------------------------------------------------!
+            !    Scale photosynthetically active radiation per unit of leaf.               !
+            !------------------------------------------------------------------------------!
+            leaf_par = csite%par_l_max(ipa) / cpatch%lai(tuco)
+            !------------------------------------------------------------------------------!
+
 
             !------------------------------------------------------------------------------!
             !    Call the photosynthesis for maximum photosynthetic rates.  The units      !
@@ -313,7 +319,7 @@ subroutine canopy_photosynthesis(csite,cmet,mzg,ipa,lsl,ntext_soil              
              , can_ssh                     & ! Canopy air sp. humidity          [    kg/kg]
              , csite%can_co2(ipa)          & ! Canopy air CO2 mixing ratio      [ µmol/mol]
              , ipft                        & ! Plant functional type            [      ---]
-             , csite%par_l_max(ipa)        & ! Absorbed photos. active rad.     [ W/m²leaf]
+             , leaf_par                    & ! Absorbed photos. active rad.     [ W/m²leaf]
              , cpatch%leaf_temp(tuco)      & ! Leaf temperature                 [        K]
              , cpatch%lint_shv(tuco)       & ! Leaf intercellular spec. hum.    [    kg/kg]
              , green_leaf_factor(ipft)     & ! Greenness rel. to on-allometry   [      ---]
