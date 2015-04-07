@@ -490,12 +490,12 @@ subroutine leaftw_derivs(mzg,mzs,initp,dinitp,csite,ipa,dt,is_hybrid)
                                 / (5.d-1 * initp%sfcwater_depth(1) - slzt8(mzg) )         
       rk4aux(ibuff)%h_flux_s   (1)     = rk4aux(ibuff)%h_flux_g(mzg+1)                               
       do k = 2,ksn
-         avg_th_cond            =  rk4aux(ibuff)%th_cond_p(k-1)                                   &
+         avg_th_cond            =  rk4aux(ibuff)%th_cond_p(k-1)                            &
                                 *  ( rk4aux(ibuff)%th_cond_p(k) / rk4aux(ibuff)%th_cond_p(k-1))          &
                                 ** ( initp%sfcwater_depth(k-1)                             &
                                    / ( initp%sfcwater_depth(k-1)                           &
                                      + initp%sfcwater_depth(k) ) )                    
-         rk4aux(ibuff)%h_flux_s(k)     = - 2.d0 * avg_th_cond                                     &
+         rk4aux(ibuff)%h_flux_s(k)     = - 2.d0 * avg_th_cond                              &
                                   * ( initp%sfcwater_tempk(k) - initp%sfcwater_tempk(k-1)) &
                                   / ( initp%sfcwater_depth(k) + initp%sfcwater_depth(k-1))
       end do
@@ -508,11 +508,11 @@ subroutine leaftw_derivs(mzg,mzs,initp,dinitp,csite,ipa,dt,is_hybrid)
    !      Add the irradiance and canopy fluxes.                                            !
    !---------------------------------------------------------------------------------------!
    dinitp%avg_sensible_gg (mzg)   = hflxgc + qwflxgc - dble(csite%rlong_g(ipa))            &
-                                  - dble(csite%rshort_g(ipa))
-   rk4aux(ibuff)%h_flux_g        (mzg+1) = rk4aux(ibuff)%h_flux_g(mzg+1) + dinitp%avg_sensible_gg (mzg)
+                                    - dble(csite%rshort_g(ipa))
+   rk4aux(ibuff)%h_flux_g (mzg+1) = rk4aux(ibuff)%h_flux_g(mzg+1) + dinitp%avg_sensible_gg (mzg)
    !---------------------------------------------------------------------------------------!
-   rk4aux(ibuff)%h_flux_s        (mzs+1) = rk4aux(ibuff)%h_flux_s(mzs+1) + hflxsc + qwflxsc - 		   &
-   									dble(csite%rlong_s(ipa)) - dble(csite%rshort_s(mzs,ipa))
+   rk4aux(ibuff)%h_flux_s (ksn+1) = rk4aux(ibuff)%h_flux_s(mzs+1) + hflxsc + qwflxsc -     &
+   									dble(csite%rlong_s(ipa)) )
 
 
 
@@ -535,7 +535,7 @@ subroutine leaftw_derivs(mzg,mzs,initp,dinitp,csite,ipa,dt,is_hybrid)
    ! formation, precipitation, shedding and percolation.                                   !
    !---------------------------------------------------------------------------------------!
    do k = 1,ksn
-     dinitp%sfcwater_energy(k) = rk4aux(ibuff)%h_flux_s(k) - rk4aux(ibuff)%h_flux_s(k+1)                 &
+     dinitp%sfcwater_energy(k) = rk4aux(ibuff)%h_flux_s(k) - rk4aux(ibuff)%h_flux_s(k+1)   &
                                + dble(csite%rshort_s(k,ipa))
    end do
    !---------------------------------------------------------------------------------------!
