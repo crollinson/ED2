@@ -26923,7 +26923,7 @@ module ed_state_vars
          nvar=nvar+1
          call vtable_edio_r(npts,cpatch%mort_rate                                          &
                            ,nvar,igr,init,cpatch%coglob_id,var_len,var_len_global,max_ptrs &
-                           ,'MORT_RATE_CO :48:hist:dail') 
+                           ,'MORT_RATE_CO :48:hist:anal:dail:mont:year') 
          call metadata_edio(nvar,igr,'Mortality rates','[1/yr]','icohort') 
       end if
       !------------------------------------------------------------------------------------!
@@ -26939,7 +26939,7 @@ module ed_state_vars
          return
       case (1)
          if (history_eorq) then
-            eorq_keys = 'hist:mont:dcyc'
+            eorq_keys = 'hist:anal:mont:dcyc'
          else
             eorq_keys = 'mont:dcyc'
          end if
