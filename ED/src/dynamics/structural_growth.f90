@@ -399,8 +399,6 @@ subroutine structural_growth(cgrid, month)
          end do patchloop
       end do siteloop
    end do polyloop
-
-
    return
 end subroutine structural_growth
 !==========================================================================================!

@@ -1702,7 +1702,7 @@ end do
 
    if (cbr_scheme < 0 .or. cbr_scheme > 2) then
       write (reason,fmt='(a,1x,i4,a)')                                                     &
-                    'Invalid CBR_SCHEME, it must be between 0 and 3.  Yours is set to' &
+                    'Invalid CBR_SCHEME, it must range from 0 to 2.  Yours is set to' &
                     ,cbr_scheme,'...'
       call opspec_fatal(reason,'opspec_misc')
       ifaterr = ifaterr +1
