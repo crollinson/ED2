@@ -134,7 +134,6 @@ module physiology_coms
    integer              :: iddmort_scheme
    integer              :: cbr_scheme
    real                 :: ddmort_const
-   integer              :: cbr_scheme
    !---------------------------------------------------------------------------------------!
 
 
