@@ -390,7 +390,6 @@ subroutine sw_two_stream(grnd_alb_par4,grnd_alb_nir4,cosaoi4,ncoh,pft,lai,wai,ca
                                    , nir_diff_norm           & ! intent(in)
                                    , cosz_min8               ! ! intent(in)
    use ed_misc_coms         , only : current_time            ! ! intent(in)
-   use consts_coms          , only : lnexp_min8, lnexp_max8
 
    implicit none
 
@@ -472,7 +471,6 @@ subroutine sw_two_stream(grnd_alb_par4,grnd_alb_nir4,cosaoi4,ncoh,pft,lai,wai,ca
    real(kind=8)                                               :: down_sky
    real(kind=8)                                               :: down0_sky
    real(kind=8)                                               :: czen
-   real(kind=8)                                               :: lnexp_now8
    !----- External functions. -------------------------------------------------------------!
    real(kind=4)                              , external       :: sngloff
    !---------------------------------------------------------------------------------------!
@@ -567,14 +565,11 @@ subroutine sw_two_stream(grnd_alb_par4,grnd_alb_nir4,cosaoi4,ncoh,pft,lai,wai,ca
          !     We find the inverse optical depth of the direct radiation (mu0), following  !
          ! CLM10 (equation 3.3 and text after equation 3.3).                               !
          !---------------------------------------------------------------------------------!
-!         proj_area(i) = phi1(ipft) + phi2(ipft) * czen
-!         mu0      (i) = - etai(i)                                                          &
-!                        / log( ( 1.d0 - cai(i) )                                           &
-!                             + cai(i) * exp( - proj_area(i) * etai(i)                      &
-!                                             / ( cai(i) * czen ) ) )
-         lnexp_now8 = max(lnexp_min8,min(lnexp_max8,-proj_area(i)*etai(i)/(cai(i)*czen)))
-         mu0(i) = -etai(i) / log( 1.d0 - cai(i) + cai(i) * exp(lnexp_now8))
-
+         proj_area(i) = phi1(ipft) + phi2(ipft) * czen
+         mu0      (i) = - etai(i)                                                          &
+                        / log( ( 1.d0 - cai(i) )                                           &
+                             + cai(i) * exp( - proj_area(i) * etai(i)                      &
+                                             / ( cai(i) * czen ) ) )
          !---------------------------------------------------------------------------------!
 
 
