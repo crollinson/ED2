@@ -655,7 +655,8 @@ module growth_balive
                               , root_turnover_rate & ! intent(in)
                               , leaf_turnover_rate ! ! intent(in)
       use consts_coms  , only : umol_2_kgC         & ! intent(in)
-                              , day_sec            ! ! intent(in)
+                              , day_sec            & ! intent(in)
+                              , tiny_num           ! ! intent(in)
       implicit none
       !----- Arguments. -------------------------------------------------------------------!
       type(patchtype), target        :: cpatch
@@ -715,6 +716,15 @@ module growth_balive
          !---------------------------------------------------------------------------------!
          
       end select
+      !------------------------------------------------------------------------------------!
+
+
+
+      !------------------------------------------------------------------------------------!
+      !      In case maintenance is too small, flush values to zero.                       !
+      !------------------------------------------------------------------------------------!
+      if (cpatch%leaf_maintenance(ico) < tiny_num) cpatch%leaf_maintenance(ico) = 0.0
+      if (cpatch%root_maintenance(ico) < tiny_num) cpatch%root_maintenance(ico) = 0.0
       !------------------------------------------------------------------------------------!
 
 
@@ -909,6 +919,7 @@ module growth_balive
       use decomp_coms   , only : f_labile                 ! ! intent(in)
       use allometry     , only : size2bl                  ! ! function
       use phenology_coms, only : elongf_min               ! ! intent(in)
+      use consts_coms   , only : tiny_num                 ! ! intent(in)
       use ed_misc_coms  , only : current_time             ! ! intent(in)
 
       implicit none
@@ -1022,7 +1033,7 @@ module growth_balive
             delta_bsapwoodb = max (0.0, bsapwoodb_aim - cpatch%bsapwoodb(ico))
             !------------------------------------------------------------------------------!
 
-            if(cpatch%elongf(ico)<1e-15) then
+            if(cpatch%elongf(ico) < tiny_num) then
                
                write(*,'(a)')' ============================================'
                write(*,'(a)')' LINE 990 growth_balive.f90'
@@ -1635,6 +1646,7 @@ module growth_balive
                                , c2n_stem     ! ! intent(in)
       use decomp_coms   , only : f_labile     ! ! intent(in)
       use allometry     , only : size2bl      ! ! function
+      use consts_coms   , only : tiny_num     ! ! intent(in)
       implicit none
       !----- Arguments. -------------------------------------------------------------------!
       type(sitetype) , target        :: csite
@@ -1718,7 +1730,7 @@ module growth_balive
             delta_bsapwoodb = max (0.0, bsapwoodb_aim - cpatch%bsapwoodb(ico))
             !------------------------------------------------------------------------------!
 
-            if(cpatch%elongf(ico)<1e-15) then
+            if(cpatch%elongf(ico) < tiny_num) then
 
                write(*,'(a)')' ============================================'
                write(*,'(a)')' LINE 1660 growth_balive.f90'
