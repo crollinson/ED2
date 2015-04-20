@@ -233,6 +233,7 @@ module fuse_fiss_utils
       type(patchtype)      , pointer     :: cpatch       ! Pointer to current site
       integer                            :: ipa,ico      ! Counters
       logical, dimension(:), allocatable :: remain_table ! Flag: this patch will remain.
+      real                               :: total_area   ! Area of removed patches
       real                               :: elim_area    ! Area of removed patches
       real                               :: new_area     ! Just to make sure area is 1.
       real                               :: area_scale   ! Scaling area factor.
@@ -247,12 +248,14 @@ module fuse_fiss_utils
       ! Realocate a new site with only the valid patches, and normalize their areas and    !
       ! plant densities to reflect the area loss.                                          !
       !------------------------------------------------------------------------------------!
-      elim_area = 0.0
+      elim_area  = 0.0
+      total_area = 0.0
       do ipa = 1,csite%npatches
          if (csite%area(ipa) < min_patch_area) then
             elim_area = elim_area + csite%area(ipa)
             remain_table(ipa) = .false.
          end if
+         total_area = total_area + csite%area(ipa)
       end do
 
       !----- Use the mask to resize the patch vectors in the current site. ----------------!
@@ -274,8 +277,8 @@ module fuse_fiss_utils
       !------------------------------------------------------------------------------------!
       !    Renormalize the total area.                                                     !
       !------------------------------------------------------------------------------------!
-      new_area=0.
-      area_scale = 1./(1. - elim_area)
+      new_area   = 0.
+      area_scale = 1.0 / (total_area - elim_area)
       do ipa = 1,csite%npatches
          csite%area(ipa) = csite%area(ipa) * area_scale
        new_area = new_area + csite%area(ipa)
