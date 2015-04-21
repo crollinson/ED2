@@ -372,11 +372,13 @@ real function het_resp_weight(soil_tempk,rel_soil_moist)
    select case (decomp_scheme)
    case (0,1)
       !----- ED-2.1 default, also used when decomp_scheme is 1. ---------------------------!
-      if (rel_soil_moist <= resp_opt_water)then
-         water_limitation = exp( (rel_soil_moist - resp_opt_water) * resp_water_below_opt)
-      else
-         water_limitation = exp( (resp_opt_water - rel_soil_moist) * resp_water_above_opt)
-      end if
+!      if (rel_soil_moist <= resp_opt_water)then
+!         water_limitation = exp( (rel_soil_moist - resp_opt_water) * resp_water_below_opt)
+!      else
+!         water_limitation = exp( (resp_opt_water - rel_soil_moist) * resp_water_above_opt)
+!      end if
+   ! From Jaclyn Matthes -- New function from empirical meta-analysis in Moyano, Biogeosciences [2012]
+   water_limitation = rel_soil_moist * 4.0893 - rel_soil_moist**2 * 3.1681 - 0.3195897
       !------------------------------------------------------------------------------------!
    case (2)
       !----- Dry soil limitation. ---------------------------------------------------------!
