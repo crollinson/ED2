@@ -1855,8 +1855,8 @@ subroutine init_decomp_params()
    resp_water_above_opt      = 4.5139
 ! --------------- 
 ! Modified Per Jaclyn Matthes to fit Moyano et al 2012
-!   resp_temperature_increase = 0.0757
-   resp_temperature_increase = 0.23503
+   resp_temperature_increase = 0.0757 ! Original
+!   resp_temperature_increase = 0.23503 !Jackie
 ! ---------------
    N_immobil_supply_scale    = 40.0 / yr_day
    cwd_frac                  = 0.2
