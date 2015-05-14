@@ -1876,7 +1876,8 @@ subroutine init_decomp_params()
    case (0,1)
       decay_rate_fsc  =  11.0 / yr_day    ! former K2
       decay_rate_stsc =   4.5 / yr_day    ! former K1
-      decay_rate_ssc  = 100.2 / yr_day    ! former K3
+!     decay_rate_ssc  = 100.2 / yr_day    ! former K3
+      decay_rate_ssc  =   0.2 / yr_day ! former K3; CRR 14 May 2015
    case (2)
       decay_rate_fsc  =  11.0 / yr_day    ! former K2
       decay_rate_stsc =   4.5 / yr_day    ! former K1
