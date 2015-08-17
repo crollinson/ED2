@@ -763,6 +763,8 @@ subroutine heun_stepper(x,h,csite,ipa,reject_step,reject_result)
    real(kind=8)      , intent(in)  :: h
    !----- Local variables -----------------------------------------------------------------!
    type(patchtype)   , pointer     :: cpatch
+   real(kind=8)                    :: combh
+   real(kind=8)                    :: dpdt
    integer                         :: ibuff
    !---------------------------------------------------------------------------------------!
 
