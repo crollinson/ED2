@@ -1154,6 +1154,7 @@ subroutine ed_opspec_misc
                                     , integration_scheme           & ! intent(in)
                                     , iallom                       & ! intent(in)
                                     , igrass                       & ! intent(in)
+                                    , growth_resp_scheme           & ! intent(in)
                                     , min_site_area                ! ! intent(in)
    use canopy_air_coms       , only : icanturb                     & ! intent(in)
                                     , isfclyrm                     & ! intent(in)
@@ -1403,10 +1404,10 @@ subroutine ed_opspec_misc
       write (unit=*,fmt='(a)') ' simulations only.  If that''s not what you wanted, change '
       write (unit=*,fmt='(a)') ' your IED_INIT_MODE variable on your ED2IN.                '
       write (unit=*,fmt='(a)') '==========================================================='
-   elseif ((ied_init_mode < -1 .or. ied_init_mode > 6) .and. &
+   elseif ((ied_init_mode < -1 .or. ied_init_mode > 7) .and. &
            (ied_init_mode /= 99 )) then
       write (reason,fmt='(a,1x,i4,a)')                                                     &
-                     'Invalid IED_INIT_MODE, it must be between -1 and 6. Yours is set to' &
+                     'Invalid IED_INIT_MODE, it must be between -1 and 7. Yours is set to' &
                     ,ied_init_mode,'...'
       call opspec_fatal(reason,'opspec_misc')
       ifaterr = ifaterr +1
@@ -1572,6 +1573,14 @@ end do
       call opspec_fatal(reason,'opspec_misc')
       ifaterr = ifaterr +1
    end if
+   
+   if (growth_resp_scheme < 0 .or. growth_resp_scheme > 1) then
+      write (reason,fmt='(a,1x,i4,a)')                                                     &
+         'Invalid GROWTH_RESP_SCHEME, it must be 0 or 1. Yours is set to'                  &
+        ,growth_resp_scheme,'...'
+      call opspec_fatal(reason,'opspec_misc')
+      ifaterr = ifaterr +1
+   end if
 
    if (ibigleaf < 0 .or. ibigleaf > 1) then
       write (reason,fmt='(a,1x,i4,a)')                                                     &
@@ -1591,7 +1600,7 @@ end do
    ! using it in case the user decides for Euler.                                          !
    !---------------------------------------------------------------------------------------!
    select case (integration_scheme)
-   case (0,1,3)
+   case (0:3)
       !------------------------------------------------------------------------------------!
       !   Check the branch thermodynamics.                                                 !
       !------------------------------------------------------------------------------------!
@@ -1615,7 +1624,7 @@ end do
       end if
    case default
       write (reason,fmt='(a,1x,i4,a)')                                                     &
-               'Invalid INTEGRATION_SCHEME, it must be 0, 1, or 3. Yours is set to'        &
+               'Invalid INTEGRATION_SCHEME, it must be 0, 1, 2, or 3. Yours is set to'     &
                ,integration_scheme,'...'
       call opspec_fatal(reason,'opspec_misc')
       ifaterr = ifaterr +1
@@ -2049,7 +2058,7 @@ end do
    if (ianth_disturb == 1) then
       !------ Checking the plantation PFT.  It must be a tree PFT. ------------------------!
       select case (plantation_stock)
-      case (2,3,4,6,7,8,9,10,11)
+      case (2,3,4,6,7,8,9,10,11,17)
          continue
       case default
          write(reason,fmt='(a,1x,i5,a)')                                                   &
@@ -2061,7 +2070,7 @@ end do
    
       !------ Checking the plantation PFT. It must be a grass PFT. ------------------------!
       select case (agri_stock)
-      case (1,5,12,13,14,15)
+      case (1,5,12,13,14,15,16)
          continue
       case default
          write(reason,fmt='(a,1x,i5,a)')                                                   &
