@@ -216,7 +216,6 @@ module disturb_coms
       ! 10 - Pasture to secondary forest (ps)                              [         1/yr] !
       ! 11 - Primary forest to secondary forest (vs)                       [         1/yr] !
       !  ====== Biomass to be harvested. ======                                            !
-<<<<<<< HEAD
       ! 12 - Wood harvest on mature secondary forest land. (sbh)           [          kgC] !
       ! 13 - Wood harvest on mature secondary forest land. (f_sbh)         [       kgC/m²] !
       ! 14 - Wood harvest on primary forested land. (vbh)                  [          kgC] !
@@ -225,16 +224,6 @@ module disturb_coms
       ! 17 - Wood harvest on young secondary forest land. (f_sbh2)         [       kgC/m²] !
       ! 18 - Wood harvest on primary non-forested land. (vbh2)             [          kgC] !
       ! 19 - Wood harvest on primary non-forested land. (f_vbh2)           [       kgC/m²] !
-=======
-      ! 12 - Wood harvest on mature secondary forest land.                 [          kgC] !
-      ! 13 - Wood harvest on mature secondary forest land.                 [       kgC/m²] !
-      ! 14 - Wood harvest on primary forested land.                        [          kgC] !
-      ! 15 - Wood harvest on primary forested land.                        [       kgC/m²] !
-      ! 16 - Wood harvest on young secondary forest land.                  [          kgC] !
-      ! 17 - Wood harvest on young secondary forest land.                  [       kgC/m²] !
-      ! 18 - Wood harvest on primary non-forested land.                    [          kgC] !
-      ! 19 - Wood harvest on primary non-forested land.                    [       kgC/m²] !
->>>>>>> b6c1426d1d984c42309aadbc53670eb23fa76e3f
       !  ====== Special flags. ======                                                      !
       ! 12 - Secondary forest is harvested using the probability of harvesting when the    !
       !      DBH is above the minimum DBH.                                                 !

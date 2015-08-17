@@ -495,16 +495,6 @@ subroutine leaftw_derivs(mzg,mzs,initp,dinitp,csite,ipa,dt,is_hybrid)
                                     / (5.d-1 * initp%sfcwater_depth(1) - slzt8(mzg) )
       rk4aux(ibuff)%h_flux_s(1)     = rk4aux(ibuff)%h_flux_g(mzg+1)
       do k = 2,ksn
-<<<<<<< HEAD
-         avg_th_cond            =  rk4aux(ibuff)%th_cond_p(k-1)                            &
-                                *  ( rk4aux(ibuff)%th_cond_p(k) / rk4aux(ibuff)%th_cond_p(k-1))          &
-                                ** ( initp%sfcwater_depth(k-1)                             &
-                                   / ( initp%sfcwater_depth(k-1)                           &
-                                     + initp%sfcwater_depth(k) ) )                    
-         rk4aux(ibuff)%h_flux_s(k)     = - 2.d0 * avg_th_cond                              &
-                                  * ( initp%sfcwater_tempk(k) - initp%sfcwater_tempk(k-1)) &
-                                  / ( initp%sfcwater_depth(k) + initp%sfcwater_depth(k-1))
-=======
          avg_th_cond                =  rk4aux(ibuff)%th_cond_p(k-1)                        &
                                     *  ( rk4aux(ibuff)%th_cond_p(k)                        &
                                        / rk4aux(ibuff)%th_cond_p(k-1))                     &
@@ -514,7 +504,6 @@ subroutine leaftw_derivs(mzg,mzs,initp,dinitp,csite,ipa,dt,is_hybrid)
          rk4aux(ibuff)%h_flux_s(k)  = - 2.d0 * avg_th_cond                                 &
                                     * ( initp%sfcwater_tempk(k)-initp%sfcwater_tempk(k-1)) &
                                     / ( initp%sfcwater_depth(k)+initp%sfcwater_depth(k-1))
->>>>>>> b6c1426d1d984c42309aadbc53670eb23fa76e3f
       end do
       !------------------------------------------------------------------------------------!
 
@@ -530,16 +519,10 @@ subroutine leaftw_derivs(mzg,mzs,initp,dinitp,csite,ipa,dt,is_hybrid)
    !---------------------------------------------------------------------------------------!
    !      Add the irradiance and canopy fluxes.                                            !
    !---------------------------------------------------------------------------------------!
-<<<<<<< HEAD
-   dinitp%avg_sensible_gg (mzg)   = hflxgc + qwflxgc - dble(csite%rlong_g(ipa))            &
-                                    - dble(csite%rshort_g(ipa))
-   rk4aux(ibuff)%h_flux_g (mzg+1) = rk4aux(ibuff)%h_flux_g(mzg+1) + dinitp%avg_sensible_gg (mzg)
-=======
    dinitp%avg_sensible_gg(mzg)   = hflxgc + qwflxgc - dble(csite%rlong_g(ipa))             &
                                  - dble(csite%rshort_g(ipa))
    rk4aux(ibuff)%h_flux_g(mzg+1) = rk4aux(ibuff)%h_flux_g(mzg+1)                           &
                                  + dinitp%avg_sensible_gg (mzg)
->>>>>>> b6c1426d1d984c42309aadbc53670eb23fa76e3f
    !---------------------------------------------------------------------------------------!
 
 

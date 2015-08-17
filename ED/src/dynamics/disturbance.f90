@@ -1530,22 +1530,7 @@ module disturbance_utils
                   cpoly%secondary_harvest_target(isi) = 0.0
                   !------------------------------------------------------------------------!
 
-<<<<<<< HEAD
-            !------------------------------------------------------------------------------!
-            !     Primary forest to secondary forest (3 => 2).  Here we must decide        !
-            ! whether we want a biomass target harvesting, or a selective logging.  When   !
-            ! harvesting is biomass-based, then we set the disturbance rate to zero,       !
-            ! otherwise we read the disturbance rate.                                      !
-            !------------------------------------------------------------------------------!
-            if (clutime%landuse(14) > 0.) then
-               cpoly%disturbance_rates(2,3,isi) = 0.0
-            else
-               cpoly%disturbance_rates(2,3,isi) = clutime%landuse(11)
-            end if
-            !------------------------------------------------------------------------------!
-=======
                else
->>>>>>> b6c1426d1d984c42309aadbc53670eb23fa76e3f
 
                   !------------------------------------------------------------------------!
                   !     Logging based on target biomass, leave the disturbance rates as    !
