@@ -85,7 +85,7 @@ subroutine vegetation_dynamics(new_month,new_year)
          call structural_growth(cgrid, current_time%month)
 
          !----- Solve the reproduction rates. ---------------------------------------------!
-         call reproduction(cgrid,current_time%month)
+         call reproduction(cgrid,current_time%month, dtlsm_o_day)
 
          !----- Update the fire disturbance rates. ----------------------------------------!
          call fire_frequency(cgrid)
