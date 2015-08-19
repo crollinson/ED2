@@ -30,7 +30,8 @@ subroutine reproduction(cgrid, month, doy)
                                  , agf_bs                   & ! intent(in)
                                  , sla                      & ! intent(in)
                                  , hgt_min                  & ! intent(in)
-                                 , plant_min_temp           ! ! intent(in)
+                                 , plant_min_temp           & ! intent(in)
+                                 , phenology                ! ! intent(in)
    use decomp_coms        , only : f_labile                 ! ! intent(in)
    use ed_max_dims        , only : n_pft                    ! ! intent(in)
    use fuse_fiss_utils    , only : sort_cohorts             & ! subroutine
@@ -125,9 +126,7 @@ subroutine reproduction(cgrid, month, doy)
          ! Hemisphere, or December in the Southern Hemisphere.                             !
          !---------------------------------------------------------------------------------!
 		 lat = cgrid%lat(ipy)
-
          late_spring = (lat >= 0.0 .and. month == 6) .or.  (lat < 0.0 .and. month == 12)
-
          daylight = daylength(lat, doy) 
 
 
@@ -164,37 +163,37 @@ subroutine reproduction(cgrid, month, doy)
                call zero_recruit(n_pft,recruit)
                cpatch => csite%patch(ipa)
 
-               !---------------------------------------------------------------------------!
-               !    Determine some patch-level phenology cues
-               !---------------------------------------------------------------------------!
-			   !----- Initialize variables. -----------------------------------------------!
-			   phen_green    = .false.
-		       !---------------------------------------------------------------------------!
-
-               select case (phenology(ipft))
-               case (0)
-                  !------------------------------------------------------------------------!
-                  !    Evergreen -- Always can establish                                   !
-                  !------------------------------------------------------------------------!
-				  phen_green = .true.
-                  !------------------------------------------------------------------------!
-               case (2)
-                  !------------------------------------------------------------------------!
-                  !    Cold-Deciduous                                                      !
-                  !------------------------------------------------------------------------!
-                  !------------------------------------------------------------------------!
-			      phen_green = .not. (daylight <= dl_tr .and.                              & 
-			                          csite%soil_tempk(isoil_lev,ipa) < st_tr1) .or.       &
-			                       csite%soil_tempk(isoil_lev,ipa) < st_tr2
-                  !------------------------------------------------------------------------!
-               case default
-                  phen_green = .true. 
-               end select
-               !------------------------------------------------------------------------!
-
 
                !---- This time we loop over PFTs, not cohorts. ----------------------------!
                pftloop: do ipft = 1, n_pft
+
+                  !------------------------------------------------------------------------!
+                  !    Determine some PFT-level phenology cues                             !
+                  !------------------------------------------------------------------------!
+                  !----- Initialize variables. --------------------------------------------!
+                  phen_green    = .false.
+                  !------------------------------------------------------------------------!
+
+                  select case (phenology(ipft))
+                  case (0)
+                     !---------------------------------------------------------------------!
+                     !    Evergreen -- Always can establish                                !
+                     !---------------------------------------------------------------------!
+				     phen_green = .true.
+                     !---------------------------------------------------------------------!
+                  case (2)
+                     !---------------------------------------------------------------------!
+                     !    Cold-Deciduous                                                   !
+                     !---------------------------------------------------------------------!
+                     !---------------------------------------------------------------------!
+                     phen_green = .not. (daylight <= dl_tr .and.                           & 
+			                             csite%soil_tempk(isoil_lev,ipa) < st_tr1) .or.    &
+			                             csite%soil_tempk(isoil_lev,ipa) < st_tr2
+                     !---------------------------------------------------------------------!
+                  case default
+                     phen_green = .true. 
+                  end select
+                  !------------------------------------------------------------------------!
 
                   !------------------------------------------------------------------------!
                   !     Check whether to include this PFT or not.  The decision depends    !
@@ -570,8 +569,10 @@ subroutine reproduction(cgrid, month, doy)
       !----- The big loops start here. ----------------------------------------------------!
       polyloop_big: do ipy = 1,cgrid%npolygons
          cpoly => cgrid%polygon(ipy)
-         late_spring = (cgrid%lat(ipy) >= 0.0 .and. month == 6) .or.                       &
-                       (cgrid%lat(ipy) < 0.0 .and. month == 12)
+
+		 lat = cgrid%lat(ipy)
+         late_spring = (lat >= 0.0 .and. month == 6) .or.  (lat < 0.0 .and. month == 12)
+         daylight = daylength(lat, doy) 
 
          !------- Update the repro arrays. ------------------------------------------------!
          call seed_dispersal(cpoly,late_spring)
@@ -595,7 +596,6 @@ subroutine reproduction(cgrid, month, doy)
                !---------------------------------------------------------------------------!
 
 
-
                !---------------------------------------------------------------------------!
                !      "Loop" over cohorts.  Reproduction does not create new patches,      !
                ! instead it will add population to the existing cohort.                    !
@@ -605,6 +605,34 @@ subroutine reproduction(cgrid, month, doy)
 
                   !------ Current PFT. ----------------------------------------------------!
                   ipft = cpatch%pft(ico)
+                  !------------------------------------------------------------------------!
+
+                  !------------------------------------------------------------------------!
+                  !    Determine some PFT-level phenology cues                             !
+                  !------------------------------------------------------------------------!
+                  !----- Initialize variables. --------------------------------------------!
+                  phen_green    = .false.
+                  !------------------------------------------------------------------------!
+
+                  select case (phenology(ipft))
+                  case (0)
+                     !---------------------------------------------------------------------!
+                     !    Evergreen -- Always can establish                                !
+                     !---------------------------------------------------------------------!
+				     phen_green = .true.
+                     !---------------------------------------------------------------------!
+                  case (2)
+                     !---------------------------------------------------------------------!
+                     !    Cold-Deciduous                                                   !
+                     !---------------------------------------------------------------------!
+                     !---------------------------------------------------------------------!
+                     phen_green = .not. (daylight <= dl_tr .and.                           & 
+			                             csite%soil_tempk(isoil_lev,ipa) < st_tr1) .or.    &
+			                             csite%soil_tempk(isoil_lev,ipa) < st_tr2
+                     !---------------------------------------------------------------------!
+                  case default
+                     phen_green = .true. 
+                  end select
                   !------------------------------------------------------------------------!
 
 
@@ -621,6 +649,7 @@ subroutine reproduction(cgrid, month, doy)
                      !----- Agriculture (cropland or pasture). ----------------------------!
                      allow_pft =                                                           &
                            include_pft_ag(ipft)                                      .and. &
+                           phen.green                                                .and. &
                            cpoly%min_monthly_temp(isi) >= plant_min_temp(ipft) - 5.0 .and. &
                            repro_scheme                /= 0
                      !---------------------------------------------------------------------!
@@ -629,6 +658,7 @@ subroutine reproduction(cgrid, month, doy)
                      !----- Forest plantation. --------------------------------------------!
                      allow_pft =                                                           &
                            include_pft_fp(ipft)                                      .and. &
+                           phen.green                                                .and. &
                            cpoly%min_monthly_temp(isi) >= plant_min_temp(ipft) - 5.0 .and. &
                            repro_scheme                /= 0
                      !---------------------------------------------------------------------!
@@ -636,6 +666,7 @@ subroutine reproduction(cgrid, month, doy)
                   case default
                      !----- Primary or secondary vegetation. ------------------------------!
                      allow_pft =                                                           &
+                           phen.green                                                .and. &
                            cpoly%min_monthly_temp(isi) >= plant_min_temp(ipft) - 5.0 .and. &
                            repro_scheme                /= 0
                      !---------------------------------------------------------------------!
