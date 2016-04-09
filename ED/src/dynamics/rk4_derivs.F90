@@ -507,13 +507,13 @@ subroutine leaftw_derivs(mzg,mzs,initp,dinitp,csite,ipa,dt,is_hybrid)
       end do
       !------------------------------------------------------------------------------------!
 
+   end if
+   !---------------------------------------------------------------------------------------!
       ! This is just sensible heat flux loss from top surface layer
       ! The layer's energy budget (shown below) will include the other terms
       ! Convention is positive up
-      rk4aux(ibuff)%h_flux_s        (ksn+1) = rk4aux(ibuff)%h_flux_s(ksn+1) + hflxsc
+      rk4aux(ibuff)%h_flux_s(mzs+1) = rk4aux(ibuff)%h_flux_s(mzs+1) + hflxsc
 
-   end if
-   !---------------------------------------------------------------------------------------!
 
 
    !---------------------------------------------------------------------------------------!
@@ -560,7 +560,7 @@ subroutine leaftw_derivs(mzg,mzs,initp,dinitp,csite,ipa,dt,is_hybrid)
    if ( ksn > 0 ) then
       dinitp%sfcwater_mass  (ksn) =  dewgnd +  wshed_tot +  throughfall_tot -  wflxsc
       dinitp%sfcwater_energy(ksn) = dinitp%sfcwater_energy(ksn) + dble(csite%rlong_s(ipa)) &
-                                  + qdewgnd + qwshed_tot + qthroughfall_tot - qwflxsc
+                                  + qdewgnd + qwshed_tot + qthroughfall_tot - qwflxsc - hflxsc
       dinitp%sfcwater_depth (ksn) = ddewgnd + dwshed_tot + dthroughfall_tot
    else
       dinitp%virtual_water        =  dewgnd +  wshed_tot +  throughfall_tot -  wflxsc
