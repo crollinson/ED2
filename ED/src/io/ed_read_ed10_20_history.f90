@@ -292,29 +292,29 @@ subroutine read_ed10_ed20_history_file
                      water(nw,ip) = sngloff(dwater(nw) ,min_ok  )
                   end do
 
-               case (2,6)
-                  !----- Standard ED-2.0 file. --------------------------------------------!
-                  read(unit=12,fmt=*,iostat=ierr) time(ip),pname(ip),trk(ip),dage,darea    &
-                                                 ,dwater(1),dfsc,dstsc,dstsl,dssc,dummy    &
-                                                 ,dmsn,dfsn
+!                case (2,6)
+!                   !----- Standard ED-2.0 file. --------------------------------------------!
+!                   read(unit=12,fmt=*,iostat=ierr) time(ip),pname(ip),trk(ip),dage,darea    &
+!                                                  ,dwater(1),dfsc,dstsc,dstsl,dssc,dummy    &
+!                                                  ,dmsn,dfsn
+! 
+!                   !------------------------------------------------------------------------!
+!                   !     Check whether the file has hit the end, and if so, leave the loop. !
+!                   !------------------------------------------------------------------------!
+!                   if(ierr /= 0)exit count_patches
+! 
+!                   !----- Copy the double-precision scratch variables to the arrays. -------!
+!                   area   (ip) = sngloff(darea    ,min_area)
+!                   age    (ip) = sngloff(dage     ,min_ok  )
+!                   fsc    (ip) = sngloff(dfsc     ,min_ok  )
+!                   stsc   (ip) = sngloff(dstsc    ,min_ok  )
+!                   stsl   (ip) = sngloff(dstsl    ,min_ok  )
+!                   ssc    (ip) = sngloff(dssc     ,min_ok  )
+!                   msn    (ip) = sngloff(dmsn     ,min_ok  )
+!                   fsn    (ip) = sngloff(dfsn     ,min_ok  )
+!                   water(1,ip) = sngloff(dwater(1),min_ok  )
 
-                  !------------------------------------------------------------------------!
-                  !     Check whether the file has hit the end, and if so, leave the loop. !
-                  !------------------------------------------------------------------------!
-                  if(ierr /= 0)exit count_patches
-
-                  !----- Copy the double-precision scratch variables to the arrays. -------!
-                  area   (ip) = sngloff(darea    ,min_area)
-                  age    (ip) = sngloff(dage     ,min_ok  )
-                  fsc    (ip) = sngloff(dfsc     ,min_ok  )
-                  stsc   (ip) = sngloff(dstsc    ,min_ok  )
-                  stsl   (ip) = sngloff(dstsl    ,min_ok  )
-                  ssc    (ip) = sngloff(dssc     ,min_ok  )
-                  msn    (ip) = sngloff(dmsn     ,min_ok  )
-                  fsn    (ip) = sngloff(dfsn     ,min_ok  )
-                  water(1,ip) = sngloff(dwater(1),min_ok  )
-
-               case (3)
+               case (2,3,6)
                   !----- ED-2.0 file, with site information. ------------------------------!
                   read(unit=12,fmt=*,iostat=ierr) sitenum(ip),time(ip),pname(ip),trk(ip)   &
                                                  ,age(ip),darea,water(1,ip),fsc(ip)        &
